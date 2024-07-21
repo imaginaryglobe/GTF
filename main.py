@@ -59,7 +59,8 @@ flag_label.pack(pady=10)
 
 
 
-lb_of_cities = tk.Listbox(window, selectmode="SINGLE", width = 20, justify="center")  # width is equal to number of characters
+lb_of_cities = tk.Listbox(window, selectmode="SINGLE", width = 36, justify="center")
+lb_of_cities.config(font=("Times", 18))
 lb_of_cities.pack(pady=10)
 
 b2=tk.Button(window,text="Submit",command=show_flag, width=10, height=2)
