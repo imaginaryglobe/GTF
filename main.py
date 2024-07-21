@@ -1,21 +1,22 @@
 import tkinter as tk
 import random
-import os
 import json
+from PIL import Image, ImageTk
 
 with open("reversed_countries.json") as file:
     data = json.load(file)
-    COUNTRY_LIST = [country[0] for country in data]
+    COUNTRY_LIST = [country.lower() + ".png" for country in data]
 
 def choose_flag():
-    file_name = random.choice(os.listdir("images/"))
-    flag_name = file_name
-    return f"images/{flag_name}"
-    
+    file_name = random.choice(COUNTRY_LIST)
+    return f"images/{file_name}"
+
 def show_flag():
-    print("click")
+    print("button clicked")
     flag_path = choose_flag()
-    flag_picture = tk.PhotoImage(file=flag_path)
+    print("flag path chosen")
+    flag_picture = ImageTk.PhotoImage(Image.open(flag_path))
+    print("flag picture created")
     flag_label.config(image=flag_picture)
     flag_label.image = flag_picture
 
@@ -29,11 +30,11 @@ top_text.pack(pady=10)
 
 
 
-flag_picture = tk.PhotoImage(file=choose_flag())
+flag_picture = ImageTk.PhotoImage(Image.open(choose_flag()))
 flag_label = tk.Label(window, image=flag_picture)
 flag_label.pack(pady=10)
 
-b2=tk.Button(window,text="Next",command=show_flag)
+b2=tk.Button(window,text="Next",command=show_flag, width=10, height=2)
 b2.pack()
 
 window.mainloop()
