@@ -16,6 +16,7 @@ def center_window(window):
 with open("reversed_countries.json") as file:
     data = json.load(file)
     COUNTRY_LIST = [country.lower() + ".png" for country in data]
+    COUNTRY_NAMES = list(data.values())
 
 def choose_flag():
     file_name = random.choice(COUNTRY_LIST)
@@ -26,7 +27,21 @@ def show_flag():
     flag_picture = ImageTk.PhotoImage(Image.open(flag_path))
     flag_label.config(image=flag_picture)
     flag_label.image = flag_picture
+    show_cities(flag_path)
 
+    
+def show_cities(flag_path):
+    lb_of_cities.delete(0, tk.END)
+    correct_position = random.randint(0, 4)
+    for i in range(4):
+        if i == correct_position:
+            city = flag_path[7:9]
+            lb_of_cities.insert(i, data[city.upper()])
+        else:
+            city = random.choice(COUNTRY_NAMES)
+            lb_of_cities.insert("end", city)
+    
+    
 window = tk.Tk()
 window.maxsize(400, 400)
 window.minsize(400, 400)
@@ -37,12 +52,17 @@ top_text = tk.Label(window, text="Guess the flag")
 top_text.pack(pady=10)  
 
 
-
-flag_picture = ImageTk.PhotoImage(Image.open(choose_flag()))
+first_flag = choose_flag()
+flag_picture = ImageTk.PhotoImage(Image.open(first_flag))
 flag_label = tk.Label(window, image=flag_picture)
 flag_label.pack(pady=10)
 
-b2=tk.Button(window,text="Next",command=show_flag, width=10, height=2)
+
+
+lb_of_cities = tk.Listbox(window, selectmode="SINGLE", width = 20, justify="center")  # width is equal to number of characters
+lb_of_cities.pack(pady=10)
+
+b2=tk.Button(window,text="Submit",command=show_flag, width=10, height=2)
 b2.pack()
 
 window.mainloop()
