@@ -2,6 +2,7 @@ import tkinter as tk
 import random
 import json
 from PIL import Image, ImageTk
+import time
 
 def center_window(window):
     window.update_idletasks()
@@ -32,6 +33,7 @@ def show_flag():
     
 def show_cities(flag_path):
     lb_of_cities.delete(0, tk.END)
+    global correct_position
     correct_position = random.randint(0, 4)
     for i in range(4):
         if i == correct_position:
@@ -40,15 +42,28 @@ def show_cities(flag_path):
         else:
             city = random.choice(COUNTRY_NAMES)
             lb_of_cities.insert("end", city)
-    
+
+def check_correct():
+    selected = lb_of_cities.curselection()
+    if selected:
+        if selected[0] == correct_position:
+            window.config(bg="#00FF00")
+            window.after(1000, lambda: window.config(bg=bgcolor))
+            show_flag()
+        else:
+            window.config(bg="#FF0000")
+            window.after(1000, lambda: window.config(bg=bgcolor))
+            show_flag()
+      
     
 window = tk.Tk()
+bgcolor = window.cget("bg")
 window.maxsize(400, 400)
 window.minsize(400, 400)
 center_window(window)
 
 
-top_text = tk.Label(window, text="Guess the flag")
+top_text = tk.Label(window, text="Guess the flag", bd=0)
 top_text.pack(pady=10)  
 
 
@@ -63,7 +78,8 @@ lb_of_cities = tk.Listbox(window, selectmode="SINGLE", width = 36, justify="cent
 lb_of_cities.config(font=("Times New Roman", 18))
 lb_of_cities.pack(pady=10)
 
-b2=tk.Button(window,text="Submit",command=show_flag, width=10, height=2)
+b2=tk.Button(window,text="Submit",command=check_correct, width=10, height=2)
 b2.pack()
 
+show_cities(first_flag)
 window.mainloop()
