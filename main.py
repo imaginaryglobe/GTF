@@ -4,9 +4,9 @@ import json
 from PIL import Image, ImageTk
 import time
 
-COUNTRY_ABBS = ["BD", "BE", "BF", "BG", "BA", "BB", "BN", "BO", "BH", "BI", "BJ", "BT", "JM", "BW", "WS", "BR", "BS", "BY", "BZ", "RU", "RW", "RS", "TL", "TM", "TJ", "RO", "GW", "GT", "GR", "GQ", "JP", "GY", "GE", "GD", "GB", "GA", "SV", "GN", "GM", "GH", "OM", "TN", "JO", "HR", "HT", "HU", "HN", "VE", "PW", "PT", "PY", "IQ", "PA", "PG", "PE", "PK", "PH", "PL", "ZM", "EE", "EG", "ZA", "EC", "IT", "VN", "SB", "ET", "SO", "ZW", "SA", "ES", "ER", "ME", "MD", "MG", "MA", "MC", "UZ", "MM", "ML", "MN", "MH", "MK", "MU", "MT", "MW", "MV", "UG", "TZ", "MY", "MX", "IL", "FR", "FI", "FJ", "NI", "NL", "NO", "NA", "VU", "NE", "NG", "NZ", "NP", "NR", "CI", "CH", "CO", "CN", "CM", "CL", "CA", "CG", "CF", "CD", "CZ", "CY", "CR", "CV", "CU", "SZ", "SY", "KG", "KE", "SS", "SR", "KI", "KH", "KN", "KM", "ST", "SK", "KR", "SI", "KP", "KW", "SN", "SM", "SL", "SC", "KZ", "SG", "SE", "SD", "DO", "DM", "DJ", "DK", "DE", "YE", "DZ", "US", "UY", "LB", "LC", "LA", "TV", "TW", "TT", "TR", "LK", "LI", "LV", "TO", "LT", "LU", "LR", "LS", "TH", "TG", "TD", "LY", "VA", "VC", "AE", "AD", "AG", "AF", "IS", "IR", "AM", "AL", "AO", "IN", "AZ", "IE", "ID", "UA", "QA", "MZ"]
+COUNTRY_ABBS = ["BD", "AR", "AU", "AT", "BE", "MR", "BF", "BG", "BA", "BB", "BN", "BO", "BH", "BI", "BJ", "BT", "JM", "BW", "WS", "BR", "BS", "BY", "BZ", "RU", "RW", "RS", "TL", "TM", "TJ", "RO", "GW", "GT", "GR", "GQ", "JP", "GY", "GE", "GD", "GB", "GA", "SV", "GN", "GM", "GH", "OM", "TN", "JO", "HR", "HT", "HU", "HN", "VE", "PW", "PT", "PY", "IQ", "PA", "PG", "PE", "PK", "PH", "PL", "ZM", "EE", "EG", "ZA", "EC", "IT", "VN", "SB", "ET", "SO", "ZW", "SA", "ES", "ER", "ME", "MD", "MG", "MA", "MC", "UZ", "MM", "ML", "MN", "MH", "MK", "MU", "MT", "MW", "MV", "UG", "TZ", "MY", "MX", "IL", "FR", "FI", "FJ", "NI", "NL", "NO", "NA", "VU", "NE", "NG", "NZ", "NP", "NR", "CI", "CH", "CO", "CN", "CM", "CL", "CA", "CG", "CF", "CD", "CZ", "CY", "CR", "CV", "CU", "SZ", "SY", "KG", "KE", "SS", "SR", "KI", "KH", "KN", "KM", "ST", "SK", "KR", "SI", "KP", "KW", "SN", "SM", "SL", "SC", "KZ", "SG", "SE", "SD", "DO", "DM", "DJ", "DK", "DE", "YE", "DZ", "US", "UY", "LB", "LC", "LA", "TV", "TW", "TT", "TR", "LK", "LI", "LV", "TO", "LT", "LU", "LR", "LS", "TH", "TG", "TD", "LY", "VA", "VC", "AE", "AD", "AG", "AF", "IS", "IR", "AM", "AL", "AO", "IN", "AZ", "IE", "ID", "UA", "QA", "MZ"]
 
-TERRITORY_ABBS = ["AQ", "AS", "AW", "AX", "BL", "BM", "BQ", "BV", "CK", "CX", "CW", "EH", "FK", "FM", "FO", "GI", "GL", "GP", "GS", "GU", "HK", "IM", "IO", "JE", "KY", "MO", "MP", "MS", "NC", "NF", "NU", "PF", "PM", "PN", "PR", "PS", "RE", "SH", "SJ", "SX", "TC", "TF", "TK", "UM", "VG", "VI", "WF", "YT"]
+TERRITORY_ABBS = ["AI", "CC", "MF", "MQ", "GF", "GG", "AQ", "AS", "AW", "AX", "BL", "BM", "BQ", "BV", "CK", "CX", "CW", "EH", "FK", "FM", "FO", "GI", "GL", "GP", "GS", "GU", "HK", "IM", "IO", "JE", "KY", "MO", "MP", "MS", "NC", "NF", "NU", "PF", "PM", "PN", "PR", "PS", "RE", "SH", "SJ", "SX", "TC", "TF", "TK", "UM", "VG", "VI", "WF", "YT"]
 
 
 
@@ -26,6 +26,7 @@ with open("reversed_countries.json") as file:
     COUNTRY_NAMES = list(data.values())
 
 def choose_flag(c_list):
+    # print(c_list)
     file_name = random.choice(c_list)
     return f"images/{file_name}"
 
@@ -34,10 +35,10 @@ def show_flag(c_list):
     flag_picture = ImageTk.PhotoImage(Image.open(flag_path))
     flag_label.config(image=flag_picture)
     flag_label.image = flag_picture
-    show_cities(flag_path)
+    show_cities(flag_path, c_list)
 
     
-def show_cities(flag_path):
+def show_cities(flag_path, c_list):
     lb_of_cities.delete(0, tk.END)
     global correct_position
     correct_position = random.randint(0, 3)
@@ -47,10 +48,11 @@ def show_cities(flag_path):
             print(data[city.upper()])  # TO SHOW ANSWERS
             lb_of_cities.insert(i, data[city.upper()])
         else:
-            city = data[random.choice(COUNTRY_ABBS).upper()]
+            city = data[random.choice(c_list).upper()[0:2]]
             if city == flag_path[7:9]:
                 while city == flag_path[7:9]:
-                    city = data[random.choice(COUNTRY_ABBS).upper()]
+                    city = data[random.choice(c_list).upper()[0:2]]
+            
             lb_of_cities.insert("end", city)
 
 def check_correct():
