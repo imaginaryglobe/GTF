@@ -22,16 +22,15 @@ def center_window(window):
     
 with open("reversed_countries.json") as file:
     data = json.load(file)
-    global COUNTRY_LIST
     COUNTRY_LIST = [country.lower() + ".png" for country in data]
     COUNTRY_NAMES = list(data.values())
 
-def choose_flag():
-    file_name = random.choice(COUNTRY_LIST)
+def choose_flag(c_list):
+    file_name = random.choice(c_list)
     return f"images/{file_name}"
 
-def show_flag():
-    flag_path = choose_flag()
+def show_flag(c_list):
+    flag_path = choose_flag(c_list)
     flag_picture = ImageTk.PhotoImage(Image.open(flag_path))
     flag_label.config(image=flag_picture)
     flag_label.image = flag_picture
@@ -50,7 +49,8 @@ def show_cities(flag_path):
         else:
             city = data[random.choice(COUNTRY_ABBS).upper()]
             if city == flag_path[7:9]:
-                city = data[random.choice(COUNTRY_ABBS).upper()]
+                while city == flag_path[7:9]:
+                    city = data[random.choice(COUNTRY_ABBS).upper()]
             lb_of_cities.insert("end", city)
 
 def check_correct():
@@ -59,21 +59,21 @@ def check_correct():
         if selected[0] == correct_position:
             window.config(bg="#00FF00")
             window.after(500, lambda: window.config(bg=bgcolor))
-            show_flag()
+            show_flag(c_list)
         else:
             window.config(bg="#FF0000")
             window.after(500, lambda: window.config(bg=bgcolor))
-            show_flag()
+            show_flag(c_list)
             
             
             
 def toggle_territories():
-    # fix not being able to update country_list to add territories
+    global c_list
     if territories_checked.get():
-        COUNTRY_LIST += [country.lower() + ".png" for country in data]
+        c_list = [country.lower() + ".png" for country in data]
     else:
-        COUNTRY_LIST = [country + ".png" for country in COUNTRY_ABBS]
-    show_flag()
+        c_list = [country + ".png" for country in COUNTRY_ABBS]
+    show_flag(c_list)
     
 window = tk.Tk()
 bgcolor = window.cget("bg")
@@ -89,7 +89,7 @@ territories_checked = tk.BooleanVar()
 territories_cb = tk.Checkbutton(window, text="Include territories", variable=territories_checked, command=toggle_territories)
 territories_cb.pack(side="top")
 
-first_flag = choose_flag()
+first_flag = choose_flag([country + ".png" for country in COUNTRY_ABBS])
 flag_picture = ImageTk.PhotoImage(Image.open(first_flag))
 flag_label = tk.Label(window, image=flag_picture)
 flag_label.pack(pady=10)
