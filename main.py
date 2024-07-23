@@ -48,6 +48,8 @@ def show_cities(flag_path):
             lb_of_cities.insert(i, data[city.upper()])
         else:
             city = random.choice(COUNTRY_NAMES)
+            if city == flag_path[7:9]:
+                city = random.choice(COUNTRY_NAMES)
             lb_of_cities.insert("end", city)
 
 def check_correct():
