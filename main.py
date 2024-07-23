@@ -22,6 +22,7 @@ def center_window(window):
     
 with open("reversed_countries.json") as file:
     data = json.load(file)
+    global COUNTRY_LIST
     COUNTRY_LIST = [country.lower() + ".png" for country in data]
     COUNTRY_NAMES = list(data.values())
 
@@ -47,9 +48,9 @@ def show_cities(flag_path):
             print(data[city.upper()])  # TO SHOW ANSWERS
             lb_of_cities.insert(i, data[city.upper()])
         else:
-            city = random.choice(COUNTRY_NAMES)
+            city = data[random.choice(COUNTRY_ABBS).upper()]
             if city == flag_path[7:9]:
-                city = random.choice(COUNTRY_NAMES)
+                city = data[random.choice(COUNTRY_ABBS).upper()]
             lb_of_cities.insert("end", city)
 
 def check_correct():
@@ -63,7 +64,16 @@ def check_correct():
             window.config(bg="#FF0000")
             window.after(500, lambda: window.config(bg=bgcolor))
             show_flag()
-      
+            
+            
+            
+def toggle_territories():
+    # fix not being able to update country_list to add territories
+    if territories_checked.get():
+        COUNTRY_LIST += [country.lower() + ".png" for country in data]
+    else:
+        COUNTRY_LIST = [country + ".png" for country in COUNTRY_ABBS]
+    show_flag()
     
 window = tk.Tk()
 bgcolor = window.cget("bg")
@@ -75,8 +85,9 @@ center_window(window)
 top_text = tk.Label(window, text="Guess the flag", bd=0)
 top_text.pack(pady=10)  
 
-territories_cb = tk.Checkbutton(window, text="Include territories", variable=tk.IntVar())
-territories_cb.pack(side="top", anchor="ne")
+territories_checked = tk.BooleanVar()
+territories_cb = tk.Checkbutton(window, text="Include territories", variable=territories_checked, command=toggle_territories)
+territories_cb.pack(side="top")
 
 first_flag = choose_flag()
 flag_picture = ImageTk.PhotoImage(Image.open(first_flag))
@@ -92,5 +103,5 @@ lb_of_cities.pack(pady=10)
 b2=tk.Button(window,text="Submit",command=check_correct, width=10, height=2, bd=0)
 b2.pack()
 
-show_cities(first_flag)
+toggle_territories()
 window.mainloop()
