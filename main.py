@@ -55,17 +55,23 @@ def show_cities(flag_path, c_list):
             
             lb_of_cities.insert("end", city)
 
+answer_delay = 500
+reset_delay = answer_delay + 200
+
 def check_correct():
     selected = lb_of_cities.curselection()
     if selected:
         if selected[0] == correct_position:
-            window.config(bg="#00FF00")
-            window.after(500, lambda: window.config(bg=bgcolor))
-            show_flag(c_list)
+            lb_of_cities.itemconfig(correct_position, {"selectbackground": "green"})
+            lb_of_cities.after(answer_delay, lambda: lb_of_cities.itemconfig(correct_position, {"selectbackground": lb_color}))
+            window.after(reset_delay, lambda: show_flag(c_list))
         else:
-            window.config(bg="#FF0000")
-            window.after(500, lambda: window.config(bg=bgcolor))
-            show_flag(c_list)
+            lb_of_cities.itemconfig(correct_position, {"bg": "green"})
+            lb_of_cities.itemconfig(selected[0], {"selectbackground": "red"})
+
+            lb_of_cities.after(answer_delay, lambda: lb_of_cities.itemconfig(correct_position, {"bg": lb_color}))
+            lb_of_cities.after(answer_delay, lambda: lb_of_cities.itemconfig(selected[0], {"selectbackground": lb_color}))
+            window.after(reset_delay, lambda: show_flag(c_list))
             
             
             
@@ -99,8 +105,9 @@ flag_label.pack(pady=10)
 
 
 lb_of_cities = tk.Listbox(window, selectmode="SINGLE", width = 36, justify="center")
-lb_of_cities.config(font=("Times New Roman", 18))
+lb_of_cities.config(font=("Times New Roman", 18), activestyle="none")
 lb_of_cities.pack(pady=10)
+lb_color = lb_of_cities.cget("bg")
 
 b2=tk.Button(window,text="Submit",command=check_correct, width=10, height=2, bd=0)
 b2.pack()
